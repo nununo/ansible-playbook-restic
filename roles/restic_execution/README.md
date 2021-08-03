@@ -8,6 +8,7 @@ Restic must be installed in the inventory instances.
 
 ## Role Variables
 
+|Variable|Description|
 |---|---|
 |folders |List of folders to backup (required) |
 |restic_repository |The path to the restic repository (required) |
@@ -28,6 +29,7 @@ None.
 
 ## Example Playbook
 
+```yaml
 - hosts: restic_backup
   roles:
   - restic_backup:
@@ -44,6 +46,7 @@ None.
       keep_monthly: 12
       keep_yearly: 50
       keep_last: ""
+```
 
 ## License
 
