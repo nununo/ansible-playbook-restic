@@ -1,0 +1,37 @@
+# Requires these variables:
+# - restic_operation
+# - restic_repository_place
+# - restic_backup_jobs
+
+- name: Local pre command
+  include_tasks: shell_command.yml
+  vars:
+    command: '{{ local_pre_command }}'
+    run_locally: yes
+  when: local_pre_command is defined and local_pre_command != ''
+
+- name: Remote pre command
+  include_tasks: shell_command.yml
+  vars:
+    command: '{{ remote_pre_command }}'
+  when: remote_pre_command is defined and remote_pre_command != ''
+
+- include_tasks: determine_repository.yml
+
+- include_tasks: restic.yml
+
+- include_tasks: forget.yml
+  when: restic_operation == 'backup' and restic_forget | bool
+
+- name: Remote post command
+  include_tasks: shell_command.yml
+  vars:
+    command: '{{ remote_post_command }}'
+  when: remote_post_command is defined and remote_post_command != ''
+
+- name: Local post command
+  include_tasks: shell_command.yml
+  vars:
+    command: '{{ local_post_command }}'
+    run_locally: yes
+  when: local_post_command is defined and local_post_command != ''

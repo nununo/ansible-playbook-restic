@@ -1,0 +1,10 @@
+ansible_become_pass: 'myuser_password'
+
+restic_backup_jobs:
+- folders:
+  - /mnt/folder1
+  name: server2.example.com
+  restic_password: 'restic_repo_password'
+  backup_remote_pre_command: mount /mnt/folder1
+  backup_remote_post_command: umount /mnt/folder1
+  repository_places: [myresticserver]

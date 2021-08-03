@@ -1,0 +1,30 @@
+- block:
+  - name: Append set -e to command
+    set_fact:
+      command_with_set_e: set -e;{{ command }}
+
+  - name: Remote command
+    block:
+    - name: Execute remote command
+      shell: '{{ command_with_set_e }}'
+      become: yes
+      register: command_results
+
+    - debug:
+        var: command_results.stdout
+    when: run_locally is not defined or not run_locally
+
+  - name: Local command
+    block:
+    - name: Execute local command
+      shell: '{{ command_with_set_e }}'
+      delegate_to: localhost
+      register: command_results
+
+    - debug:
+        var: command_results.stdout
+    when: run_locally is defined and run_locally
+  when: command is defined and command != ''
+
+- set_fact:
+    command:

@@ -1,0 +1,23 @@
+- name: Concatenate forget parameters (weekly, monthly, yearly)
+  set_fact:
+    concatenated_forget: --keep-weekly {{ keep_weekly }} --keep-monthly {{ keep_monthly }} --keep-yearly {{ keep_yearly }}
+  when: keep_last is not defined or keep_last == ""
+
+- name: Concatenate forget parameters (last)
+  set_fact:
+    concatenated_forget: --keep-last {{ keep_last }}
+  when: keep_last is defined and keep_last != ""
+
+- debug:
+    var: concatenated_forget
+
+- name: Run restic forget command
+  shell: restic -v -v -v forget --prune {{ concatenated_forget }}
+  register: restic_forget_results
+  environment:
+    RESTIC_REPOSITORY: '{{ restic_repository }}'
+    RESTIC_PASSWORD: '{{ restic_password }}'
+
+- name: Dump restic backup output
+  debug:
+    var: restic_forget_results.stdout_lines

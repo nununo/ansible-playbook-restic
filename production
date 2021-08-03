@@ -1,0 +1,11 @@
+[restic_just_backup]
+files.example.com
+
+[restic_backup_and_restore]
+awx.example.com
+imap.example.com
+influx.example.com
+
+[restic:children]
+restic_just_backup
+restic_backup_and_restore

@@ -1,0 +1,16 @@
+# Requires these variables:
+# - restic_operation
+# - restic_repository_place
+# - restic_backup_jobs
+
+- name: Backup
+  include_tasks: backup.yml
+  when: restic_operation == 'backup'
+
+- name: Restore
+  include_tasks: restore.yml
+  when: restic_operation == 'restore'
+
+- name: Restic operation
+  include_tasks: operation.yml
+  when: restic_operation != 'backup' and restic_operation != 'restore'

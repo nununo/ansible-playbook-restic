@@ -1,0 +1,11 @@
+ansible_become_pass: 'myuser_password'
+
+restic_backup_jobs:
+- folders:
+  - /tmp/backup
+  restic_password: 'restic_repo_password'
+  backup_remote_pre_command: influx backup /tmp/backup
+  backup_remote_post_comand: rm -rf /tmp/backup
+  restore_remote_pre_comand: rm -rf /tmp/backup
+  restore_remote_post_command: influx restore --full /tmp/backup
+  repository_places: [myresticserver]

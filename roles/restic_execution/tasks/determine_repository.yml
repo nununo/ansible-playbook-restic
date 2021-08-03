@@ -1,0 +1,20 @@
+- name: Reset restic_repository
+  set_fact:
+    restic_repository: ''
+
+- name: If name given, use it
+  set_fact:
+    restic_repository: '{{ name }}'
+  when: name is defined and name != ""
+
+- name: Otherwise use hostname
+  set_fact:
+    restic_repository: '{{ inventory_hostname }}'
+  when: restic_repository == ""
+
+- name: Prefix it with the repository place
+  set_fact:
+    restic_repository: '{{ restic_repository_prefixes[restic_repository_place] }}{{ restic_repository }}'
+
+- debug:
+    var: restic_repository

@@ -1,0 +1,34 @@
+- name: Set restic backup operation
+  set_fact:
+    restic_command_string: restic -v -v -v backup {{ ' '.join(folders) }}
+  when: restic_operation == 'backup'
+
+- name: Set restic restore operation
+  set_fact:
+    restic_command_string: restic -v -v -v restore latest --target '/'
+  when: restic_operation == 'restore'
+
+- name: Set restic check/init/prune/snapshots/stats/version operations
+  set_fact:
+    restic_command_string: restic -v -v -v {{ restic_operation }}
+  when: restic_operation == 'check' or restic_operation == 'init' or restic_operation == 'prune' or restic_operation == 'snapshots' or restic_operation == 'stats' or restic_operation == 'version'
+
+- fail:
+    msg: Invalid operation {{ restic_operation }}
+  when: restic_command_string is not defined
+
+- debug:
+    var: restic_command_string
+
+- name: Run restic command
+  shell: '{{ restic_command_string }}'
+  register: restic_command_results
+  ignore_errors: yes
+  become: yes
+  environment:
+    RESTIC_REPOSITORY: '{{ restic_repository }}'
+    RESTIC_PASSWORD: '{{ restic_password }}'
+
+- name: Dump command output
+  debug:
+    var: restic_command_results

@@ -1,0 +1,11 @@
+# restic forget
+restic_backup_forget_default: yes
+restic_backup_keep_weekly_default: 5
+restic_backup_keep_monthly_default: 12
+restic_backup_keep_yearly_default: 50
+
+# Determine if a log is provided in case of failure. In case of
+# failure, this log shows all the restic_backup parameters,
+# which may include passwords and other sensible information
+# so it should only be used for debugging purposes.
+restic_backup_no_log: yes

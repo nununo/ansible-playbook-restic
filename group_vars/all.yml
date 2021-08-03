@@ -1,0 +1,4 @@
+ansible_user: myuser
+
+restic_repository_prefixes:
+  myresticserver: rest:http://restic.example.com/

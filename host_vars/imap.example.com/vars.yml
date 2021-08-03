@@ -1,0 +1,12 @@
+ansible_user: root
+
+restic_backup_jobs:
+- folders:
+  - /home/user1/Maildir
+  - /home/user2/Maildir
+  restic_password: 'restic_repo_password'
+  backup_remote_pre_command: systemctl stop dovecot.service
+  backup_remote_post_command: systemctl start dovecot.service
+  restore_remote_pre_command: systemctl stop dovecot.service
+  restore_remote_post_command: systemctl start dovecot.service
+  repository_places: [myresticserver]

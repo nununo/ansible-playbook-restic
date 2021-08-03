@@ -1,0 +1,24 @@
+# Requires these variables:
+# - restic_operation
+# - restic_repository_place
+# - restic_backup_jobs
+
+- include_role:
+    name: restic_execution
+  vars:
+    folders: '{{ item.folders }}'
+    name: "{{ item.name|default('') }}"
+    restic_password: '{{ item.restic_password }}'
+    remote_pre_command: "{{ item.restore_remote_pre_command|default('') }}"
+    remote_post_command: "{{ item.restore_remote_post_command|default('') }}"
+    local_pre_command: "{{ item.restore_local_pre_command|default('') }}"
+    local_post_command: "{{ item.restore_local_post_command|default('') }}"
+    restic_forget: '{{ item.restic_forget|default(restic_backup_forget_default) }}'
+    keep_weekly: '{{ item.keep_weekly|default(restic_backup_keep_weekly_default) }}'
+    keep_monthly: '{{ item.keep_monthly|default(restic_backup_keep_monthly_default) }}'
+    keep_yearly: '{{ item.keep_yearly|default(restic_backup_keep_yearly_default) }}'
+    keep_last: "{{ item.keep_last|default('') }}"
+  when:
+  - restic_repository_place in item.repository_places
+#  no_log: '{{ item.restic_backup_no_log|default(restic_backup_no_log) }}'
+  loop: '{{ restic_backup_jobs }}'

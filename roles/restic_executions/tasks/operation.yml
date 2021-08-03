@@ -1,0 +1,14 @@
+# Requires these variables:
+# - restic_operation
+# - restic_repository_place
+# - restic_backup_jobs
+
+- include_role:
+    name: restic_execution
+  vars:
+    name: "{{ item.name|default('') }}"
+    restic_password: '{{ item.restic_password }}'
+  when:
+  - restic_repository_place in item.repository_places
+  no_log: '{{ item.restic_backup_no_log|default(restic_backup_no_log) }}'
+  loop: '{{ restic_backup_jobs }}'

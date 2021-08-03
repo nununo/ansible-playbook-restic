@@ -1,0 +1,11 @@
+ansible_become_pass: 'myuser_password'
+
+ansible_awx_admin_password: 'awx_admin_password'
+restic_backup_jobs:
+- folders:
+  - /tmp/awx-config-dump.json
+  restic_password: 'restic_repo_password'
+  backup_remote_pre_command: tower-cli login --password {{ ansible_aux_admin_password }} admin; tower-cli receive --all > /tmp/awx-config-dump.json; tower-cli logout
+  backup_remote_post_command: rm /tmp/awx-config-dump.json
+  restore_remote_post_command: tower-cli login --password {{ ansible_aux_admin_password }} admin; tower-cli send /tmp/awx-config-dump.json; tower-cli logout; rm /tmp/awx-config-dump.json
+  repository_places: [myresticserver]

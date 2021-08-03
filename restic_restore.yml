@@ -1,0 +1,9 @@
+# Requires variables restic_repository_place (myresticserver)
+
+# Restore
+- hosts: restic_backup_and_restore
+  gather_facts: no
+  vars:
+    restic_operation: restore
+  roles:
+  - role: restic_executions
